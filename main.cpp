@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include <string>
 #include <vector>
 #include <chrono>
@@ -59,6 +60,7 @@ int main() {
 		}
 		std::cout << " on station:" << std::endl;
 		std::cin >> in_train.time;
+		assert(in_train.time > 0);
 		trains.push_back(in_train);
 	}
 	int timeMin = 1000000000;
@@ -67,13 +69,14 @@ int main() {
 	}
 
 	std::cout << "Trains start....0...." << std::endl;
-	std::thread tr_wait_A(Wait, timeMin);
+	
+	std::thread tr_wait(Wait, timeMin);
 
 	std::thread tr_A(GoWaitGo, trains[0]);
 	std::thread tr_B(GoWaitGo, trains[1]);
 	std::thread tr_C(GoWaitGo, trains[2]);
 
-	tr_wait_A.join();
+	tr_wait.join();
 	tr_A.join();
 	tr_B.join();
 	tr_C.join();
